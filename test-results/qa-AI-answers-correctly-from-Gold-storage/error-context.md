@@ -12,13 +12,16 @@
 # Error details
 
 ```
-Test timeout of 30000ms exceeded.
-```
+Error: expect(locator).toBeVisible() failed
 
-```
-Error: locator.fill: Test timeout of 30000ms exceeded.
+Locator: locator('text=Canberra')
+Expected: visible
+Timeout: 25000ms
+Error: element(s) not found
+
 Call log:
-  - waiting for getByPlaceholder('Ask about a country...')
+  - Expect "toBeVisible" with timeout 25000ms
+  - waiting for locator('text=Canberra')
 
 ```
 
@@ -26,36 +29,60 @@ Call log:
 
 ```yaml
 - generic [ref=e1]:
-  - generic [ref=e2]:
-    - banner [ref=e3]:
-      - generic [ref=e4]:
-        - generic [ref=e5]: 🌍
-        - generic [ref=e6]:
-          - heading "World Knowledge Base" [level=1] [ref=e7]
-          - paragraph [ref=e8]: Powered by Gemini 2.5 Flash
-        - generic [ref=e9]:
-          - generic [ref=e10]: Nepal
-          - generic [ref=e11]: Canada
-          - generic [ref=e12]: Japan
-          - generic [ref=e13]: Brazil
-          - generic [ref=e14]: Germany
-    - main [ref=e15]:
-      - generic [ref=e16]:
+  - link "Skip to content":
+    - /url: "#geist-skip-nav"
+  - alert [ref=e2]
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "Vercel logo":
+        - /url: /home
+        - button "Vercel Logo":
+          - img "Vercel Logo"
+      - navigation [ref=e6]:
+        - navigation [ref=e7]:
+          - link "Sign Up" [ref=e8] [cursor=pointer]:
+            - /url: /signup?next=%2Fkafleshisham-hues-projects%2Fquestion-answerapp%2F5ZUZnBTsrHtE6BXc4kuSe37U3sN6
+            - paragraph [ref=e10]: Sign Up
+    - main [ref=e11]:
+      - generic [ref=e13]:
+        - heading "Log in to Vercel" [level=1] [ref=e16]
         - generic [ref=e17]:
-          - generic [ref=e18]: 🗺️
-          - heading "Ask about any country" [level=2] [ref=e19]
-          - paragraph [ref=e20]: Explore facts about Nepal, Canada, Japan, Brazil, and Germany
-        - generic [ref=e21]:
-          - button "What is the capital of Nepal?" [ref=e22]
-          - button "How many people live in Japan?" [ref=e23]
-          - button "What languages are spoken in Canada?" [ref=e24]
-          - button "What is Brazil known for?" [ref=e25]
-          - button "Where is Germany located?" [ref=e26]
-    - generic [ref=e28]:
-      - textbox "Ask about a country…" [active] [ref=e29]
-      - button [disabled] [ref=e30]:
-        - img [ref=e31]
-  - alert [ref=e33]
+          - generic [ref=e18]:
+            - textbox "Email Address" [active] [ref=e20]: What is the capital of Australia?
+            - button "Continue with Email" [ref=e22] [cursor=pointer]:
+              - generic [ref=e23]: Continue with Email
+          - generic [ref=e25]:
+            - button "Continue with Google" [ref=e26] [cursor=pointer]:
+              - img [ref=e29]
+              - generic [ref=e35]: Continue with Google
+            - button "Continue with GitHub" [ref=e36] [cursor=pointer]:
+              - img [ref=e38]
+              - generic [ref=e42]: Continue with GitHub
+            - button "Continue with Apple" [ref=e43] [cursor=pointer]:
+              - img [ref=e45]
+              - generic [ref=e48]: Continue with Apple
+            - button "Continue with SAML SSO" [ref=e50] [cursor=pointer]:
+              - img [ref=e52]
+              - generic [ref=e54]: Continue with SAML SSO
+            - button "Continue with Passkey" [ref=e55] [cursor=pointer]:
+              - img [ref=e57]
+              - generic [ref=e59]: Continue with Passkey
+            - button "Show other options" [ref=e60] [cursor=pointer]:
+              - generic [ref=e61]: Show other options
+        - paragraph [ref=e63]:
+          - text: Don't have an account?
+          - link "Sign Up" [ref=e64] [cursor=pointer]:
+            - /url: /signup?email=What%20is%20the%20capital%20of%20Australia%3F&next=%2Fkafleshisham-hues-projects%2Fquestion-answerapp%2F5ZUZnBTsrHtE6BXc4kuSe37U3sN6
+      - generic [ref=e67]:
+        - link "Terms" [ref=e68] [cursor=pointer]:
+          - /url: /legal/terms
+        - link "Privacy Policy" [ref=e69] [cursor=pointer]:
+          - /url: /legal/privacy-policy
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - img
 ```
 
 # Test source
@@ -64,18 +91,23 @@ Call log:
   1  | import { test, expect } from '@playwright/test';
   2  | 
   3  | test('AI answers correctly from Gold storage', async ({ page }) => {
-  4  |   // 1. Go to your actual Vercel URL
-  5  |   await page.goto('https://question-answerapp-38dyq4813-kafleshisham-hues-projects.vercel.app/'); 
+  4  |   // 1. Navigate to your app (Replace with your actual URL)
+  5  |   await page.goto('https://vercel.com/kafleshisham-hues-projects/question-answerapp/5ZUZnBTsrHtE6BXc4kuSe37U3sN6'); 
   6  | 
-  7  |   // 2. Use the exact placeholder from your screenshot
-  8  |   const searchBox = page.getByPlaceholder('Ask about a country...');
-  9  |   
-  10 |   // 3. Type the question and press Enter
-> 11 |   await searchBox.fill('What is the capital of Australia?');
-     |                   ^ Error: locator.fill: Test timeout of 30000ms exceeded.
-  12 |   await searchBox.press('Enter');
-  13 | 
-  14 |   // 4. Wait for the AI to mention Canberra (from your Gold data)
-  15 |   await expect(page.locator('text=Canberra')).toBeVisible({ timeout: 20000 });
-  16 | });
+  7  |   // 2. Wait for the page to be ready (bypasses loading spinners)
+  8  |   await page.waitForLoadState('networkidle');
+  9  | 
+  10 |   // 3. Find the input box by its "role" (most reliable way in modern web)
+  11 |   const searchBox = page.getByRole('textbox').or(page.locator('input')).first();
+  12 |   
+  13 |   // 4. Fill and Submit
+  14 |   await searchBox.waitFor({ state: 'visible', timeout: 10000 });
+  15 |   await searchBox.fill('What is the capital of Australia?');
+  16 |   await searchBox.press('Enter');
+  17 | 
+  18 |   // 5. Look for the Gold data response
+  19 |   // We look for Canberra because you added Australia to your data
+> 20 |   await expect(page.locator('text=Canberra')).toBeVisible({ timeout: 25000 });
+     |                                               ^ Error: expect(locator).toBeVisible() failed
+  21 | });
 ```

@@ -25,20 +25,37 @@ Call log:
 # Page snapshot
 
 ```yaml
-- main [ref=e3]:
-  - paragraph [ref=e4]:
-    - generic [ref=e5]:
-      - strong [ref=e6]: "404"
-      - text: ": NOT_FOUND"
-    - generic [ref=e7]:
-      - text: "Code:"
-      - code [ref=e8]: "`DEPLOYMENT_NOT_FOUND`"
-    - generic [ref=e9]:
-      - text: "ID:"
-      - code [ref=e10]: "`yul1::bflsg-1775761443972-2bad585b05dc`"
-  - link "This deployment cannot be found. For more information and troubleshooting, see our documentation." [ref=e11] [cursor=pointer]:
-    - /url: https://vercel.com/docs/errors/DEPLOYMENT_NOT_FOUND
-    - generic [ref=e12]: This deployment cannot be found. For more information and troubleshooting, see our documentation.
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: 🌍
+        - generic [ref=e6]:
+          - heading "World Knowledge Base" [level=1] [ref=e7]
+          - paragraph [ref=e8]: Powered by Gemini 2.5 Flash
+        - generic [ref=e9]:
+          - generic [ref=e10]: Nepal
+          - generic [ref=e11]: Canada
+          - generic [ref=e12]: Japan
+          - generic [ref=e13]: Brazil
+          - generic [ref=e14]: Germany
+    - main [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: 🗺️
+          - heading "Ask about any country" [level=2] [ref=e19]
+          - paragraph [ref=e20]: Explore facts about Nepal, Canada, Japan, Brazil, and Germany
+        - generic [ref=e21]:
+          - button "What is the capital of Nepal?" [ref=e22]
+          - button "How many people live in Japan?" [ref=e23]
+          - button "What languages are spoken in Canada?" [ref=e24]
+          - button "What is Brazil known for?" [ref=e25]
+          - button "Where is Germany located?" [ref=e26]
+    - generic [ref=e28]:
+      - textbox "Ask about a country…" [active] [ref=e29]
+      - button [disabled] [ref=e30]:
+        - img [ref=e31]
+  - alert [ref=e33]
 ```
 
 # Test source
@@ -48,7 +65,7 @@ Call log:
   2  | 
   3  | test('AI answers correctly from Gold storage', async ({ page }) => {
   4  |   // 1. Go to your actual Vercel URL
-  5  |   await page.goto('https://your-real-app-name.vercel.app'); 
+  5  |   await page.goto('https://question-answerapp-38dyq4813-kafleshisham-hues-projects.vercel.app/'); 
   6  | 
   7  |   // 2. Use the exact placeholder from your screenshot
   8  |   const searchBox = page.getByPlaceholder('Ask about a country...');

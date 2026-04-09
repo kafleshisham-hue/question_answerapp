@@ -18,5 +18,9 @@
   {
     "name": "Germany",
     "context": "Germany is located in Europe. Its capital is Berlin with a population of 83,000,000. Languages spoken: German. Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals."
+  },
+  {
+    "name": "Australia",
+    "context": "Australia is located in Oceania. Its capital is Canberra with a population of 25,000,000. Languages spoken: English. Australia is the only country that is also a continent. It has unique wildlife like kangaroos and koalas."
   }
 ]

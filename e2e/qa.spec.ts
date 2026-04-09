@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('AI answers correctly from Gold storage', async ({ page }) => {
   // 1. Go to your actual Vercel URL
-  await page.goto('https://your-real-app-name.vercel.app'); 
+  await page.goto('https://question-answerapp-38dyq4813-kafleshisham-hues-projects.vercel.app/'); 
 
   // 2. Use the exact placeholder from your screenshot
   const searchBox = page.getByPlaceholder('Ask about a country...');

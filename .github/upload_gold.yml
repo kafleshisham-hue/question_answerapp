@@ -2,7 +2,8 @@ name: Upload Gold Data to GCP
 on:
   push:
     paths:
-      - 'countries.json'
+      - 'data/gold/**' # Triggers for any change in the gold folder
+      - 'countries.json' # Keeps root trigger just in case
 
 jobs:
   upload:

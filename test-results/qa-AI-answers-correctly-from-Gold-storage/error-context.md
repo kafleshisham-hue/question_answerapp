@@ -38,7 +38,7 @@ Call log:
       - navigation [ref=e6]:
         - navigation [ref=e7]:
           - link "Sign Up" [ref=e8] [cursor=pointer]:
-            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fquestion-answerapp-79qixv2hc-kafleshisham-hues-projects.vercel.app%252F%26nonce%3D7c3fb3b611c33a94493c90fd13eb258d678b788d9438622f11dfb515e7d3e192
+            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fquestion-answerapp-79qixv2hc-kafleshisham-hues-projects.vercel.app%252F%26nonce%3D845117629c3004dc35ba27dadc4d9ae528574c58469ab64b5fb256ad051bdfa8
             - paragraph [ref=e10]: Sign Up
     - main [ref=e11]:
       - generic [ref=e13]:
@@ -69,7 +69,7 @@ Call log:
         - paragraph [ref=e63]:
           - text: Don't have an account?
           - link "Sign Up" [ref=e64] [cursor=pointer]:
-            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fquestion-answerapp-79qixv2hc-kafleshisham-hues-projects.vercel.app%252F%26nonce%3D7c3fb3b611c33a94493c90fd13eb258d678b788d9438622f11dfb515e7d3e192
+            - /url: /signup?next=%2Fsso-api%3Furl%3Dhttps%253A%252F%252Fquestion-answerapp-79qixv2hc-kafleshisham-hues-projects.vercel.app%252F%26nonce%3D845117629c3004dc35ba27dadc4d9ae528574c58469ab64b5fb256ad051bdfa8
       - generic [ref=e67]:
         - link "Terms" [ref=e68] [cursor=pointer]:
           - /url: /legal/terms
@@ -91,12 +91,12 @@ Call log:
   4  |   // Go to your LIVE Vercel URL
   5  |   await page.goto('https://question-answerapp-79qixv2hc-kafleshisham-hues-projects.vercel.app'); 
   6  | 
-  7  |   // Ask about Spain (The data you just added to Bronze and synced to GCP!)
-> 8  |   await page.fill('input[placeholder*="Ask"]', 'What is the capital of Spain?');
+  7  |   // Ask about Australia (The data you just added to Bronze and synced to GCP!)
+> 8  |   await page.fill('input[placeholder*="Ask"]', 'What is the capital of australia?');
      |              ^ Error: page.fill: Test timeout of 30000ms exceeded.
   9  |   await page.keyboard.press('Enter');
   10 | 
   11 |   // Assert it finds the answer from your Gold JSON file
-  12 |   await expect(page.locator('text=Madrid')).toBeVisible({ timeout: 15000 });
+  12 |   await expect(page.locator('text=Canberra')).toBeVisible({ timeout: 15000 });
   13 | });
 ```

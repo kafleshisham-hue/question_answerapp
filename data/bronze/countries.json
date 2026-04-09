@@ -38,5 +38,14 @@
     "region": "Europe",
     "languages": ["German"],
     "facts": "Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals."
-  }
+  },
+  
+ {
+        "name": "Australia",
+        "capital": "Canberra",
+        "population": 25000000,
+        "region": "Oceania",
+        "languages": ["English"],
+        "facts": "Australia is the only country that is also a continent. It has unique wildlife like kangaroos and koalas."
+    }   
 ]

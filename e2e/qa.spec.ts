@@ -1,25 +1,13 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
-test('user can paste a document, ask a question, and see an answer', async ({ page }) => {
-  await page.goto('/')
+test('AI answers correctly from Gold storage', async ({ page }) => {
+  // Go to your LIVE Vercel URL
+  await page.goto('https://your-app-name.vercel.app'); 
 
-  // Paste sample document text
-  await page.getByPlaceholder('Paste your document text here…').fill(
-    'The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. ' +
-    'It was constructed from 1887 to 1889 as the centerpiece of the 1889 World\'s Fair. ' +
-    'The tower is 330 metres tall and is the tallest structure in Paris.'
-  )
+  // Ask about Spain (The data you just added to Bronze and synced to GCP!)
+  await page.fill('input[placeholder*="Ask"]', 'What is the capital of Spain?');
+  await page.keyboard.press('Enter');
 
-  // Type a question
-  await page.getByPlaceholder('Ask a question about your document…').fill(
-    'How tall is the Eiffel Tower?'
-  )
-
-  // Click Ask
-  await page.getByRole('button', { name: 'Ask' }).click()
-
-  // Wait for an answer to appear (allow up to 30s for the AI response)
-  await expect(
-    page.locator('.justify-start .rounded-2xl').first()
-  ).not.toBeEmpty({ timeout: 30_000 })
-})
+  // Assert it finds the answer from your Gold JSON file
+  await expect(page.locator('text=Madrid')).toBeVisible({ timeout: 15000 });
+});

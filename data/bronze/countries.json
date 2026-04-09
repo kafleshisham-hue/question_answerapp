@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Nepal",
+    "capital": "Kathmandu",
+    "population": 30000000,
+    "region": "Asia",
+    "languages": ["Nepali"],
+    "facts": "Nepal is home to Mount Everest, the world's highest peak. It has never been colonized."
+  },
+  {
+    "name": "Canada",
+    "capital": "Ottawa",
+    "population": 38000000,
+    "region": "North America",
+    "languages": ["English", "French"],
+    "facts": "Canada is the second largest country in the world by area. It has 10 provinces and 3 territories."
+  },
+  {
+    "name": "Japan",
+    "capital": "Tokyo",
+    "population": 125000000,
+    "region": "Asia",
+    "languages": ["Japanese"],
+    "facts": "Japan is an island nation with over 6800 islands. It is known for technology and ancient traditions."
+  },
+  {
+    "name": "Brazil",
+    "capital": "Brasilia",
+    "population": 214000000,
+    "region": "South America",
+    "languages": ["Portuguese"],
+    "facts": "Brazil has the largest rainforest in the world. It is the largest country in South America."
+  },
+  {
+    "name": "Germany",
+    "capital": "Berlin",
+    "population": 83000000,
+    "region": "Europe",
+    "languages": ["German"],
+    "facts": "Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals."
+  }
+]

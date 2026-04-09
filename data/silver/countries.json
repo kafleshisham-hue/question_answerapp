@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Nepal",
+    "capital": "Kathmandu",
+    "population": "30,000,000",
+    "region": "Asia",
+    "languages": "Nepali",
+    "facts": "Nepal is home to Mount Everest, the world's highest peak. It has never been colonized.",
+    "summary": "Nepal is located in Asia. Its capital is Kathmandu with a population of 30,000,000. Languages spoken: Nepali."
+  },
+  {
+    "name": "Canada",
+    "capital": "Ottawa",
+    "population": "38,000,000",
+    "region": "North America",
+    "languages": "English, French",
+    "facts": "Canada is the second largest country in the world by area. It has 10 provinces and 3 territories.",
+    "summary": "Canada is located in North America. Its capital is Ottawa with a population of 38,000,000. Languages spoken: English, French."
+  },
+  {
+    "name": "Japan",
+    "capital": "Tokyo",
+    "population": "125,000,000",
+    "region": "Asia",
+    "languages": "Japanese",
+    "facts": "Japan is an island nation with over 6800 islands. It is known for technology and ancient traditions.",
+    "summary": "Japan is located in Asia. Its capital is Tokyo with a population of 125,000,000. Languages spoken: Japanese."
+  },
+  {
+    "name": "Brazil",
+    "capital": "Brasilia",
+    "population": "214,000,000",
+    "region": "South America",
+    "languages": "Portuguese",
+    "facts": "Brazil has the largest rainforest in the world. It is the largest country in South America.",
+    "summary": "Brazil is located in South America. Its capital is Brasilia with a population of 214,000,000. Languages spoken: Portuguese."
+  },
+  {
+    "name": "Germany",
+    "capital": "Berlin",
+    "population": "83,000,000",
+    "region": "Europe",
+    "languages": "German",
+    "facts": "Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals.",
+    "summary": "Germany is located in Europe. Its capital is Berlin with a population of 83,000,000. Languages spoken: German."
+  }
+]

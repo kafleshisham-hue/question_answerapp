@@ -1,10 +1,16 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const { mockCreate } = vi.hoisted(() => ({ mockCreate: vi.fn() }))
+const { mockGenerateContentStream, mockGetModel } = vi.hoisted(() => ({
+  mockGenerateContentStream: vi.fn(),
+  mockGetModel: vi.fn(),
+}))
 
-vi.mock('openai', () => ({
-  default: class {
-    chat = { completions: { create: mockCreate } }
+vi.mock('@google/generative-ai', () => ({
+  GoogleGenerativeAI: class {
+    getGenerativeModel(options: unknown) {
+      mockGetModel(options)
+      return { generateContentStream: mockGenerateContentStream }
+    }
   },
 }))
 
@@ -19,32 +25,37 @@ function makeRequest(body: object) {
 }
 
 describe('POST /api/chat', () => {
+  beforeEach(() => {
+    vi.stubEnv('GEMINI_API_KEY', 'test-key')
+    mockGetModel.mockClear()
+    mockGenerateContentStream.mockClear()
+  })
+
   it('returns 400 when document is missing', async () => {
     const response = await POST(makeRequest({ messages: [{ role: 'user', content: 'hello' }] }))
     expect(response.status).toBe(400)
   })
 
-  it('includes the document text in the system prompt sent to OpenAI', async () => {
+  it('includes the document text in the system instruction sent to Gemini', async () => {
     async function* fakeStream() {
-      yield { choices: [{ delta: { content: 'answer' } }] }
+      yield { text: () => 'answer' }
     }
-    mockCreate.mockResolvedValue(fakeStream())
+    mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
 
     await POST(
       makeRequest({ document: 'SECRET_CONTENT', messages: [{ role: 'user', content: 'q' }] })
     )
 
-    const calledMessages = mockCreate.mock.calls[0][0].messages
-    const systemMessage = calledMessages.find((m: { role: string }) => m.role === 'system')
-    expect(systemMessage.content).toContain('SECRET_CONTENT')
+    const modelOptions = mockGetModel.mock.calls[0][0]
+    expect(modelOptions.systemInstruction).toContain('SECRET_CONTENT')
   })
 
   it('returns a streaming plain-text response on valid input', async () => {
     async function* fakeStream() {
-      yield { choices: [{ delta: { content: 'Hello' } }] }
-      yield { choices: [{ delta: { content: ' world' } }] }
+      yield { text: () => 'Hello' }
+      yield { text: () => ' world' }
     }
-    mockCreate.mockResolvedValue(fakeStream())
+    mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
 
     const response = await POST(
       makeRequest({ document: 'Test doc', messages: [{ role: 'user', content: 'summarise' }] })

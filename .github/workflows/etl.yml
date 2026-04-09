@@ -31,3 +31,15 @@ jobs:
           git add data/silver data/gold
           git diff --staged --quiet || git commit -m "ETL: update silver and gold data"
           git push
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Upload to GCP Bucket'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: 'data/gold/countries.json'
+          destination: 'newqaapp/gold/'
+          parent: false

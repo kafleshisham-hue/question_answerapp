@@ -29,15 +29,29 @@ export async function POST(request: Request) {
     parts: [{ text: m.content }],
   }))
 
-  const result = await model.generateContentStream({ contents })
+  let result: Awaited<ReturnType<typeof model.generateContentStream>>
+  try {
+    result = await model.generateContentStream({ contents })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[api/chat] Gemini API error:', message)
+    return new Response(`Gemini error: ${message}`, { status: 502 })
+  }
 
   const readable = new ReadableStream({
     async start(controller) {
-      for await (const chunk of result.stream) {
-        const text = chunk.text()
-        if (text) controller.enqueue(new TextEncoder().encode(text))
+      try {
+        for await (const chunk of result.stream) {
+          const text = chunk.text()
+          if (text) controller.enqueue(new TextEncoder().encode(text))
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err)
+        console.error('[api/chat] Gemini stream error:', message)
+        controller.error(err)
+      } finally {
+        controller.close()
       }
-      controller.close()
     },
   })
 

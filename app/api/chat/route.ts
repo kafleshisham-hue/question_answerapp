@@ -1,4 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { readFileSync } from 'fs'
+import { join } from 'path'
+
+type Country = { name: string; context: string }
+
+function loadCountryContext(): string {
+  const raw = readFileSync(join(process.cwd(), 'data/gold/countries.json'), 'utf-8')
+  const countries: Country[] = JSON.parse(raw)
+  return countries.map((c) => `${c.name}: ${c.context}`).join('\n\n')
+}
 
 export async function POST(request: Request) {
   const apiKey = process.env.GEMINI_API_KEY
@@ -6,16 +16,13 @@ export async function POST(request: Request) {
     return new Response('GEMINI_API_KEY is not configured', { status: 500 })
   }
 
-  const body = await request.json()
-  const { document, messages } = body
+  const { messages } = await request.json()
 
-  if (!document) {
-    return new Response('document is required', { status: 400 })
-  }
-
+  const countryData = loadCountryContext()
   const systemInstruction =
-    `You are a document Q&A assistant. Answer questions strictly based on the provided document. ` +
-    `If the answer cannot be found in the document, say so explicitly.\n\nDocument:\n${document}`
+    `You are a world knowledge assistant. Answer questions strictly based on the country data provided below. ` +
+    `If the question is about a country not in the data, say so clearly. Be concise and friendly.\n\n` +
+    `Country Data:\n${countryData}`
 
   const genAI = new GoogleGenerativeAI(apiKey)
   const model = genAI.getGenerativeModel({
@@ -23,7 +30,6 @@ export async function POST(request: Request) {
     systemInstruction,
   })
 
-  // Gemini uses 'user'/'model' roles and parts arrays
   const contents = messages.map((m: { role: string; content: string }) => ({
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],

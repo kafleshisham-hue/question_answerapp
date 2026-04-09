@@ -14,6 +14,15 @@ vi.mock('@google/generative-ai', () => ({
   },
 }))
 
+vi.mock('fs', () => ({
+  readFileSync: () =>
+    JSON.stringify([
+      { name: 'Nepal', context: 'Nepal is in Asia. Capital is Kathmandu.' },
+    ]),
+}))
+
+vi.mock('path', () => ({ join: (...args: string[]) => args.join('/') }))
+
 import { POST } from './route'
 
 function makeRequest(body: object) {
@@ -31,26 +40,20 @@ describe('POST /api/chat', () => {
     mockGenerateContentStream.mockClear()
   })
 
-  it('returns 400 when document is missing', async () => {
-    const response = await POST(makeRequest({ messages: [{ role: 'user', content: 'hello' }] }))
-    expect(response.status).toBe(400)
-  })
-
-  it('includes the document text in the system instruction sent to Gemini', async () => {
+  it('includes country data in the system instruction sent to Gemini', async () => {
     async function* fakeStream() {
-      yield { text: () => 'answer' }
+      yield { text: () => 'Kathmandu is the capital.' }
     }
     mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
 
-    await POST(
-      makeRequest({ document: 'SECRET_CONTENT', messages: [{ role: 'user', content: 'q' }] })
-    )
+    await POST(makeRequest({ messages: [{ role: 'user', content: 'Capital of Nepal?' }] }))
 
     const modelOptions = mockGetModel.mock.calls[0][0]
-    expect(modelOptions.systemInstruction).toContain('SECRET_CONTENT')
+    expect(modelOptions.systemInstruction).toContain('Nepal')
+    expect(modelOptions.systemInstruction).toContain('Kathmandu')
   })
 
-  it('returns a streaming plain-text response on valid input', async () => {
+  it('returns a streaming plain-text response', async () => {
     async function* fakeStream() {
       yield { text: () => 'Hello' }
       yield { text: () => ' world' }
@@ -58,13 +61,11 @@ describe('POST /api/chat', () => {
     mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
 
     const response = await POST(
-      makeRequest({ document: 'Test doc', messages: [{ role: 'user', content: 'summarise' }] })
+      makeRequest({ messages: [{ role: 'user', content: 'Tell me about Nepal' }] })
     )
 
     expect(response.status).toBe(200)
     expect(response.headers.get('Content-Type')).toContain('text/plain')
-
-    const text = await response.text()
-    expect(text).toBe('Hello world')
+    expect(await response.text()).toBe('Hello world')
   })
 })

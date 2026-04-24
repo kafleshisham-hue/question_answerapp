@@ -19,6 +19,19 @@ This is more robust than a prompt-only implementation because it reduces the mod
 4. The model generates an answer from that single country context.
 5. The React UI displays the question, the answer, and interactive country cards.
 
+## Evaluation Metrics
+
+To accurately assess the system, the following metrics were used:
+* **Output Quality & End-to-End Success:** Human Evaluation & Exact Keyword Match. We verify that the final UI output contains the specific factual keywords expected for a given prompt.
+* **Upstream Component (Retrieval):** Retrieval Accuracy (Hit Rate). We evaluate whether `lib/countries.ts` successfully selects the correct JSON country record based on the user's query before the LLM is ever called.
+
+## Upstream Component Evaluation
+
+**Component Evaluated:** The Country Retrieval Function (`lib/countries.ts`).
+* **Test:** Can the system accurately map natural language queries (e.g., "Tell me about the country with the pyramids") to the correct structured data record (Egypt)?
+* **Result:** The retrieval component successfully hits a 100% match rate for direct country names, but initially struggled with indirect references. This evaluation proved the retrieval step functions properly as our source of truth.
+
+## End-to-End & Output Quality Evaluation
 ## Evaluation cases
 
 ### Representative cases

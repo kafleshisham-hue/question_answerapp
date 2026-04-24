@@ -15,6 +15,8 @@ This project extends the basic Next.js template with:
 
 ## 🚀 Quick Start
 
+**Prerequisites:** Node.js 18.17 or later.
+
 1. **Install dependencies**
    ```bash
    npm install
@@ -24,6 +26,12 @@ This project extends the basic Next.js template with:
    ```bash
    # Get key from https://makersuite.google.com/app/apikey
    echo "GEMINI_API_KEY=your-key-here" > .env.local
+
+   # If utilizing AWS S3 cloud storage for data syncing:
+   echo "AWS_ACCESS_KEY_ID=your-access-key" >> .env.local
+   echo "AWS_SECRET_ACCESS_KEY=your-secret-key" >> .env.local
+   echo "AWS_REGION=your-region" >> .env.local
+   echo "AWS_S3_BUCKET_NAME=your-bucket" >> .env.local
    ```
 
 3. **Run locally**

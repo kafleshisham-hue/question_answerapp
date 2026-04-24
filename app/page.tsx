@@ -13,6 +13,21 @@ const SUGGESTIONS = [
   'Where is South Africa located?',
 ]
 
+const FLAGS: Record<string, string> = {
+  'Nepal': 'np',
+  'Canada': 'ca',
+  'Japan': 'jp',
+  'Brazil': 'br',
+  'Germany': 'de',
+  'Australia': 'au',
+  'India': 'in',
+  'Egypt': 'eg',
+  'Mexico': 'mx',
+  'France': 'fr',
+  'China': 'cn',
+  'South Africa': 'za',
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [question, setQuestion] = useState('')
@@ -87,8 +102,17 @@ export default function Home() {
             {COUNTRIES.slice(0, 8).map((c) => (
               <span
                 key={c.name}
-                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+                className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
               >
+                {FLAGS[c.name] ? (
+                  <img 
+                    src={`https://flagcdn.com/w20/${FLAGS[c.name]}.png`} 
+                    alt={`${c.name} flag`} 
+                    className="w-3.5 rounded-[1px] shadow-sm" 
+                  />
+                ) : (
+                  '🌍'
+                )}
                 {c.name}
               </span>
             ))}
@@ -133,7 +157,18 @@ export default function Home() {
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <h3 className="text-xl font-semibold text-slate-900">{country.name}</h3>
+                          <h3 className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+                            {FLAGS[country.name] ? (
+                              <img 
+                                src={`https://flagcdn.com/w40/${FLAGS[country.name]}.png`} 
+                                alt={`${country.name} flag`} 
+                                className="w-6 rounded-[2px] shadow-sm" 
+                              />
+                            ) : (
+                              '🌍'
+                            )}
+                            {country.name}
+                          </h3>
                           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
                             {country.context?.split('.')[0] || 'Country facts'}.
                           </p>
@@ -162,14 +197,6 @@ export default function Home() {
                         >
                           Ask AI
                         </button>
-                        <a
-                          href={`https://www.google.com/maps/search/${encodeURIComponent(country.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                        >
-                          Map link
-                        </a>
                       </div>
                     </div>
                   ))}

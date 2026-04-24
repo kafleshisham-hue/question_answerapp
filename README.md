@@ -1,57 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 AI Country Knowledge Assistant
 
-## Getting Started
+A Next.js app that answers questions about countries using Google Gemini AI. Built for Assignment 6.
 
-First, set up your API key:
+## ✨ What's New (vs. Default Next.js)
 
-**Google Gemini**
-1. Get an API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Add to `.env.local`: `GEMINI_API_KEY=your-api-key-here`
+This project extends the basic Next.js template with:
 
-Then, run the development server:
+- **🤖 AI Integration** - Google Gemini API for intelligent country answers
+- **🗺️ Country Database** - 12 countries with detailed information
+- **💬 Chat Interface** - Real-time AI conversations with streaming responses
+- **🎨 Enhanced UI** - Country cards, maps integration, and modern design
+- **🧪 Testing Suite** - Unit tests and end-to-end tests
+- **☁️ Cloud Storage** - AWS S3 integration for data management
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Quick Start
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Add API Key**
+   ```bash
+   # Get key from https://makersuite.google.com/app/apikey
+   echo "GEMINI_API_KEY=your-key-here" > .env.local
+   ```
+
+3. **Run locally**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open** [http://localhost:3000](http://localhost:3000)
+
+## 🏗️ Project Structure
+
+```
+├── app/
+│   ├── api/chat/     # AI chat endpoint (NEW)
+│   └── page.tsx      # Main UI with country cards (ENHANCED)
+├── data/gold/        # Country data (NEW)
+├── lib/countries.ts  # Country utilities (NEW)
+├── e2e/              # End-to-end tests (NEW)
+└── test-results/     # Test outputs (NEW)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧪 Testing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Unit tests
+npm test
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# E2E tests
+npx playwright test
+```
 
-## Learn More
+## 🚀 Deployment
 
-To learn more about Next.js, take a look at the following resources:
+### Vercel (Recommended)
+1. Connect GitHub repo to Vercel
+2. Add `GEMINI_API_KEY` to environment variables
+3. Deploy automatically
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Manual Build
+```bash
+npm run build
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📚 Assignment 6 Features
 
-## Deploy on Vercel
+- **Structured Data Retrieval** - Country lookup from JSON database
+- **AI Prompt Engineering** - Context-aware responses using country data
+- **Error Handling** - Graceful fallbacks for API issues
+- **Performance Testing** - Comprehensive evaluation framework
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js 16** - React framework with App Router
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Google Gemini** - AI responses
+- **Vitest** - Unit testing
+- **Playwright** - E2E testing
 
-**Important**: Add your API keys to Vercel environment variables:
-- `GEMINI_API_KEY` (required)
+## 📝 Available Countries
+
+🇳🇵 Nepal • 🇨🇦 Canada • 🇯🇵 Japan • 🇧🇷 Brazil • 🇩🇪 Germany • 🇦🇺 Australia • 🇮🇳 India • 🇪🇬 Egypt • 🇲🇽 Mexico • 🇫🇷 France • 🇨🇳 China • 🇿🇦 South Africa
+
 ---
 
-## Assignment 6 evaluation
-
-This project was extended for Assignment 6 by adding a structured country dataset, a simple retrieval step, and a safer prompt flow.
-
-* `data/gold/countries.json` now stores structured country metadata.
-* `lib/countries.ts` selects the relevant country for a user question.
-* `app/api/chat/route.ts` builds the model prompt from the selected country record using Google Gemini.
-* `EVALUATION.md` documents representative cases, failure cases, and the lightweight baseline comparison.
-
-See `EVALUATION.md` for the full evaluation plan and improvement summary.
+*Built for Artificial Intelligence course - Semester 2, Assignment 6*

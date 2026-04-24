@@ -32,15 +32,15 @@ jobs:
           git diff --staged --quiet || git commit -m "ETL: update silver and gold data"
           git push
 
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: 'Upload to GCP Bucket'
-        uses: 'google-github-actions/upload-cloud-storage@v2'
-        with:
-          bucket: 'newqaapp'
-          path: 'data/gold/countries.json'
-          destination: 'gold/'
-          parent: false
+      - name: Sync gold dataset to S3
+        run: |
+          aws s3 sync data/gold s3://question-answer-app123/gold --delete
+

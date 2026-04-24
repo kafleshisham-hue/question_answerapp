@@ -1,15 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const { mockGenerateContentStream, mockGetModel } = vi.hoisted(() => ({
-  mockGenerateContentStream: vi.fn(),
-  mockGetModel: vi.fn(),
+const { mockCreate, mockOpenAI } = vi.hoisted(() => ({
+  mockCreate: vi.fn(),
+  mockOpenAI: vi.fn(),
 }))
 
-vi.mock('@google/generative-ai', () => ({
-  GoogleGenerativeAI: class {
-    getGenerativeModel(options: unknown) {
-      mockGetModel(options)
-      return { generateContentStream: mockGenerateContentStream }
+vi.mock('openai', () => ({
+  default: class OpenAI {
+    constructor(options: { apiKey: string }) {
+      mockOpenAI(options)
+    }
+    chat = {
+      completions: {
+        create: mockCreate,
+      },
     }
   },
 }))
@@ -26,30 +30,31 @@ function makeRequest(body: object) {
 
 describe('POST /api/chat', () => {
   beforeEach(() => {
-    vi.stubEnv('GEMINI_API_KEY', 'test-key')
-    mockGetModel.mockClear()
-    mockGenerateContentStream.mockClear()
+    vi.stubEnv('OPENAI_API_KEY', 'test-key')
+    mockCreate.mockClear()
+    mockOpenAI.mockClear()
   })
 
-  it('includes the selected country record in the system instruction', async () => {
+  it('includes the selected country record in the system message', async () => {
     async function* fakeStream() {
-      yield { text: () => 'Kathmandu is the capital.' }
+      yield { choices: [{ delta: { content: 'Kathmandu is the capital.' } }] }
     }
-    mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
+    mockCreate.mockResolvedValue(fakeStream())
 
     await POST(makeRequest({ messages: [{ role: 'user', content: 'Capital of Nepal?' }] }))
 
-    const modelOptions = mockGetModel.mock.calls[0][0]
-    expect(modelOptions.systemInstruction).toContain('Selected Country:')
-    expect(modelOptions.systemInstruction).toContain('Capital: Kathmandu')
+    const callArgs = mockCreate.mock.calls[0][0]
+    expect(callArgs.messages[0].content).toContain('Selected Country:')
+    expect(callArgs.messages[0].content).toContain('Capital: Kathmandu')
+    expect(callArgs.model).toBe('gpt-4')
   })
 
   it('returns a streaming plain-text response', async () => {
     async function* fakeStream() {
-      yield { text: () => 'Hello' }
-      yield { text: () => ' world' }
+      yield { choices: [{ delta: { content: 'Hello' } }] }
+      yield { choices: [{ delta: { content: ' world' } }] }
     }
-    mockGenerateContentStream.mockResolvedValue({ stream: fakeStream() })
+    mockCreate.mockResolvedValue(fakeStream())
 
     const response = await POST(
       makeRequest({ messages: [{ role: 'user', content: 'Tell me about Nepal' }] })

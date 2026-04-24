@@ -246,7 +246,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-3xl px-6 py-4 text-center text-xs text-slate-500">
-          <p>Powered by Google Gemini AI • Built with Next.js</p>
+          <p>Powered by OpenAI GPT-4 • Built with Next.js</p>
         </div>
       </footer>
 

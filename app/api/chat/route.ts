@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import OpenAI from 'openai'
 import { findRelevantCountry, serializeCountryContext, getCountryNameList } from '@/lib/countries'
 
 function getLastUserMessage(messages: Array<{ role: string; content: string }>) {
@@ -9,9 +9,9 @@ function getLastUserMessage(messages: Array<{ role: string; content: string }>) 
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.GEMINI_API_KEY
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
-    return new Response('GEMINI_API_KEY is not configured', { status: 500 })
+    return new Response('OPENAI_API_KEY is not configured', { status: 500 })
   }
 
   const { messages } = await request.json()
@@ -23,44 +23,50 @@ export async function POST(request: Request) {
     : `You are a world knowledge assistant. The user asked a question about countries, but the system only has data for these countries: ${getCountryNameList()}. ` +
       `If the requested country is not listed, respond that the information is not available. Be concise, helpful, and do not invent details.`
 
-  const genAI = new GoogleGenerativeAI(apiKey)
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
-    systemInstruction,
-  })
+  const openai = new OpenAI({ apiKey })
 
-  const contents = messages.map((m: { role: string; content: string }) => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }],
-  }))
+  const openaiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+    { role: 'system', content: systemInstruction },
+    ...messages.map((m: { role: string; content: string }) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    })),
+  ]
 
-  let result: Awaited<ReturnType<typeof model.generateContentStream>>
   try {
-    result = await model.generateContentStream({ contents })
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: openaiMessages,
+      stream: true,
+      temperature: 0.7,
+      max_tokens: 1000,
+    })
+
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content
+            if (text) {
+              controller.enqueue(new TextEncoder().encode(text))
+            }
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err)
+          console.error('[api/chat] OpenAI stream error:', message)
+          controller.error(err)
+        } finally {
+          controller.close()
+        }
+      },
+    })
+
+    return new Response(readable, {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error('[api/chat] Gemini API error:', message)
-    return new Response(`Gemini error: ${message}`, { status: 502 })
+    console.error('[api/chat] OpenAI API error:', message)
+    return new Response(`OpenAI error: ${message}`, { status: 502 })
   }
-
-  const readable = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of result.stream) {
-          const text = chunk.text()
-          if (text) controller.enqueue(new TextEncoder().encode(text))
-        }
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        console.error('[api/chat] Gemini stream error:', message)
-        controller.error(err)
-      } finally {
-        controller.close()
-      }
-    },
-  })
-
-  return new Response(readable, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-  })
 }

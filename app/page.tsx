@@ -1,23 +1,23 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { COUNTRIES } from '@/lib/countries'
 
 type Message = { role: 'user' | 'assistant' | 'error'; content: string }
 
-const COUNTRIES = ['Nepal', 'Canada', 'Japan', 'Brazil', 'Germany']
-
 const SUGGESTIONS = [
-  'What is the capital of Nepal?',
-  'How many people live in Japan?',
-  'What languages are spoken in Canada?',
-  'What is Brazil known for?',
-  'Where is Germany located?',
+  'What is the capital of India?',
+  'What does Egypt have famous?',
+  'Tell me about France’s culture.',
+  'What languages are spoken in Mexico?',
+  'Where is South Africa located?',
 ]
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [question, setQuestion] = useState('')
   const [streaming, setStreaming] = useState(false)
+  const [showFacts, setShowFacts] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -71,27 +71,32 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-sky-50 via-cyan-100 to-slate-100 text-slate-900">
 
       {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
+      <header className="border-b border-slate-200/60 bg-white shadow-sm">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-6 py-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500 text-lg shadow-lg shadow-blue-500/30">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-400 text-xl text-white shadow-xl shadow-sky-300/30">
             🌍
           </div>
           <div>
-            <h1 className="text-base font-semibold tracking-tight">World Knowledge Base</h1>
-            <p className="text-xs text-blue-300/70">Powered by Gemini 2.5 Flash</p>
+            <h1 className="text-lg font-semibold tracking-tight text-slate-900">World Knowledge Base</h1>
+            <p className="text-sm text-slate-500">Bright country cards, AI answers, and interactive exploration.</p>
           </div>
-          <div className="ml-auto flex gap-2">
-            {COUNTRIES.map((c) => (
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            {COUNTRIES.slice(0, 8).map((c) => (
               <span
-                key={c}
-                className="hidden rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-medium text-white/60 sm:inline"
+                key={c.name}
+                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
               >
-                {c}
+                {c.name}
               </span>
             ))}
+            {COUNTRIES.length > 8 && (
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+                +{COUNTRIES.length - 8} more
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -105,21 +110,102 @@ export default function Home() {
             <div className="text-center">
               <div className="mb-4 text-6xl">🗺️</div>
               <h2 className="text-2xl font-bold tracking-tight">Ask about any country</h2>
-              <p className="mt-2 text-sm text-blue-200/60">
-                Explore facts about Nepal, Canada, Japan, Brazil, and Germany
+              <p className="mt-2 text-sm text-slate-500">
+                Explore facts for 12 countries including Nepal, India, Egypt, Mexico, France, China, and more.
               </p>
             </div>
-            <div className="flex w-full flex-col gap-2">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => handleAsk(s)}
-                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-white/70 transition-all hover:border-blue-400/40 hover:bg-white/10 hover:text-white"
-                >
-                  {s}
-                </button>
-              ))}
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => setShowFacts((current) => !current)}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all hover:border-sky-300 hover:bg-sky-50"
+              >
+                {showFacts ? 'Hide country cards' : 'Show country cards'}
+              </button>
             </div>
+            {showFacts ? (
+              <>
+                <div className="grid w-full max-w-4xl grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {COUNTRIES.map((country) => (
+                    <div
+                      key={country.name}
+                      className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <h3 className="text-xl font-semibold text-slate-900">{country.name}</h3>
+                          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+                            {country.facts.split('.')[0]}.
+                          </p>
+                        </div>
+                        <a
+                          href={`https://www.google.com/maps/search/${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-200"
+                        >
+                          Open map
+                        </a>
+                      </div>
+                      <div className="mt-4 h-28 overflow-hidden rounded-3xl bg-slate-100 p-3">
+                        <div className="flex h-full items-center justify-center text-slate-400">
+                          Click “Open map” to view {country.name} on Google Maps.
+                        </div>
+                      </div>
+                      <div className="mt-4 grid gap-2 rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">
+                        <div><span className="font-semibold text-slate-700">Capital:</span> {country.capital}</div>
+                        <div><span className="font-semibold text-slate-700">Population:</span> {country.population}</div>
+                        <div><span className="font-semibold text-slate-700">Region:</span> {country.region}</div>
+                        <div><span className="font-semibold text-slate-700">Languages:</span> {country.languages.join(', ')}</div>
+                        <div><span className="font-semibold text-slate-700">Facts:</span> {country.facts}</div>
+                      </div>
+                      <div className="mt-5 flex gap-3">
+                        <button
+                          onClick={() => handleAsk(`Tell me more about ${country.name}`)}
+                          className="flex-1 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                        >
+                          Ask AI
+                        </button>
+                        <a
+                          href={`https://www.google.com/maps/search/${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                        >
+                          Map link
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 w-full max-w-4xl rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Quick suggestions</h3>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => handleAsk(s)}
+                        className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:border-sky-300 hover:bg-slate-50"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="grid w-full max-w-4xl grid-cols-1 gap-3">
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => handleAsk(s)}
+                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:border-sky-300 hover:bg-slate-50"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -139,10 +225,10 @@ export default function Home() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'rounded-br-sm bg-blue-600 text-white shadow-lg shadow-blue-900/40'
+                      ? 'rounded-br-sm bg-slate-800 text-white shadow-lg shadow-slate-400/30'
                       : msg.role === 'error'
-                        ? 'rounded-bl-sm border border-red-500/30 bg-red-500/10 text-red-300'
-                        : 'rounded-bl-sm border border-white/10 bg-white/5 text-white/90'
+                        ? 'rounded-bl-sm border border-red-200 bg-red-50 text-red-700'
+                        : 'rounded-bl-sm border border-slate-200 bg-white text-slate-900'
                   }`}
                 >
                   {msg.content || (streaming && i === messages.length - 1
@@ -157,20 +243,27 @@ export default function Home() {
         )}
       </main>
 
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-slate-50">
+        <div className="mx-auto max-w-3xl px-6 py-4 text-center text-xs text-slate-500">
+          <p>Powered by Google Gemini AI • Built with Next.js</p>
+        </div>
+      </footer>
+
       {/* Input bar */}
-      <div className="sticky bottom-0 border-t border-white/10 bg-slate-900/80 backdrop-blur-sm">
+      <div className="sticky bottom-0 border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-6 py-4">
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="text-xs text-white/30 transition-colors hover:text-white/60"
+              className="text-xs text-slate-500 transition-colors hover:text-slate-900"
             >
               Clear
             </button>
           )}
           <input
             type="text"
-            className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 backdrop-blur-sm transition focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/50 disabled:opacity-40"
+            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500/20 disabled:opacity-40"
             placeholder="Ask about a country…"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
@@ -181,7 +274,7 @@ export default function Home() {
           <button
             onClick={() => handleAsk()}
             disabled={streaming || !question.trim()}
-            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-900/50 transition-all hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-sky-400/30 transition-all hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {streaming ? (
               <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">

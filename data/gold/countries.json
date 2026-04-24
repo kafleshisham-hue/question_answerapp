@@ -1,26 +1,98 @@
 [
   {
     "name": "Nepal",
-    "context": "Nepal is located in Asia. Its capital is Kathmandu with a population of 30,000,000. Languages spoken: Nepali. Nepal is home to Mount Everest, the world's highest peak. It has never been colonized."
+    "capital": "Kathmandu",
+    "population": "30,000,000",
+    "region": "Asia",
+    "languages": ["Nepali"],
+    "facts": "Nepal is home to Mount Everest, the world's highest peak. It has never been colonized."
   },
   {
     "name": "Canada",
-    "context": "Canada is located in North America. Its capital is Ottawa with a population of 38,000,000. Languages spoken: English, French. Canada is the second largest country in the world by area. It has 10 provinces and 3 territories."
+    "capital": "Ottawa",
+    "population": "38,000,000",
+    "region": "North America",
+    "languages": ["English", "French"],
+    "facts": "Canada is the second largest country in the world by area. It has 10 provinces and 3 territories."
   },
   {
     "name": "Japan",
-    "context": "Japan is located in Asia. Its capital is Tokyo with a population of 125,000,000. Languages spoken: Japanese. Japan is an island nation with over 6800 islands. It is known for technology and ancient traditions."
+    "capital": "Tokyo",
+    "population": "125,000,000",
+    "region": "Asia",
+    "languages": ["Japanese"],
+    "facts": "Japan is an island nation with over 6800 islands. It is known for technology and ancient traditions."
   },
   {
     "name": "Brazil",
-    "context": "Brazil is located in South America. Its capital is Brasilia with a population of 214,000,000. Languages spoken: Portuguese. Brazil has the largest rainforest in the world. It is the largest country in South America."
+    "capital": "Brasilia",
+    "population": "214,000,000",
+    "region": "South America",
+    "languages": ["Portuguese"],
+    "facts": "Brazil has the largest rainforest in the world. It is the largest country in South America."
   },
   {
     "name": "Germany",
-    "context": "Germany is located in Europe. Its capital is Berlin with a population of 83,000,000. Languages spoken: German. Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals."
+    "capital": "Berlin",
+    "population": "83,000,000",
+    "region": "Europe",
+    "languages": ["German"],
+    "facts": "Germany is the largest economy in Europe. It is known for engineering, cars, and beer festivals."
   },
   {
     "name": "Australia",
-    "context": "Australia is located in Oceania. Its capital is Canberra with a population of 25,000,000. Languages spoken: English. Australia is the only country that is also a continent. It has unique wildlife like kangaroos and koalas."
+    "capital": "Canberra",
+    "population": "25,000,000",
+    "region": "Oceania",
+    "languages": ["English"],
+    "facts": "Australia is the only country that is also a continent. It has unique wildlife like kangaroos and koalas."
+  },
+  {
+    "name": "India",
+    "capital": "New Delhi",
+    "population": "1.4 billion",
+    "region": "Asia",
+    "languages": ["Hindi", "English"],
+    "facts": "India is known for its diverse culture, festivals, and technology hubs."
+  },
+  {
+    "name": "Egypt",
+    "capital": "Cairo",
+    "population": "105,000,000",
+    "region": "Africa",
+    "languages": ["Arabic"],
+    "facts": "Egypt is famous for the Nile River, ancient pyramids, and rich history."
+  },
+  {
+    "name": "Mexico",
+    "capital": "Mexico City",
+    "population": "128,000,000",
+    "region": "North America",
+    "languages": ["Spanish"],
+    "facts": "Mexico is known for its cuisine, ancient ruins, and colorful traditions."
+  },
+  {
+    "name": "France",
+    "capital": "Paris",
+    "population": "67,000,000",
+    "region": "Europe",
+    "languages": ["French"],
+    "facts": "France is famous for art, fashion, wine, and historic landmarks."
+  },
+  {
+    "name": "China",
+    "capital": "Beijing",
+    "population": "1.4 billion",
+    "region": "Asia",
+    "languages": ["Mandarin"],
+    "facts": "China has a long history, modern megacities, and the Great Wall."
+  },
+  {
+    "name": "South Africa",
+    "capital": "Pretoria",
+    "population": "60,000,000",
+    "region": "Africa",
+    "languages": ["English", "Afrikaans", "Zulu"],
+    "facts": "South Africa is known for wildlife, national parks, and scenic coastlines."
   }
 ]

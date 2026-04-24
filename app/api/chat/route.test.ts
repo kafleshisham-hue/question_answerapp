@@ -14,15 +14,6 @@ vi.mock('@google/generative-ai', () => ({
   },
 }))
 
-vi.mock('fs', () => ({
-  readFileSync: () =>
-    JSON.stringify([
-      { name: 'Nepal', context: 'Nepal is in Asia. Capital is Kathmandu.' },
-    ]),
-}))
-
-vi.mock('path', () => ({ join: (...args: string[]) => args.join('/') }))
-
 import { POST } from './route'
 
 function makeRequest(body: object) {
@@ -40,7 +31,7 @@ describe('POST /api/chat', () => {
     mockGenerateContentStream.mockClear()
   })
 
-  it('includes country data in the system instruction sent to Gemini', async () => {
+  it('includes the selected country record in the system instruction', async () => {
     async function* fakeStream() {
       yield { text: () => 'Kathmandu is the capital.' }
     }
@@ -49,8 +40,8 @@ describe('POST /api/chat', () => {
     await POST(makeRequest({ messages: [{ role: 'user', content: 'Capital of Nepal?' }] }))
 
     const modelOptions = mockGetModel.mock.calls[0][0]
-    expect(modelOptions.systemInstruction).toContain('Nepal')
-    expect(modelOptions.systemInstruction).toContain('Kathmandu')
+    expect(modelOptions.systemInstruction).toContain('Selected Country:')
+    expect(modelOptions.systemInstruction).toContain('Capital: Kathmandu')
   })
 
   it('returns a streaming plain-text response', async () => {

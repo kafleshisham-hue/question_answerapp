@@ -1,13 +1,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import { findRelevantCountry, serializeCountryContext, getCountryNameList } from '@/lib/countries'
 
-type Country = { name: string; context: string }
-
-function loadCountryContext(): string {
-  const raw = readFileSync(join(process.cwd(), 'data/gold/countries.json'), 'utf-8')
-  const countries: Country[] = JSON.parse(raw)
-  return countries.map((c) => `${c.name}: ${c.context}`).join('\n\n')
+function getLastUserMessage(messages: Array<{ role: string; content: string }>) {
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    if (messages[i].role === 'user') return messages[i].content
+  }
+  return ''
 }
 
 export async function POST(request: Request) {
@@ -17,12 +15,13 @@ export async function POST(request: Request) {
   }
 
   const { messages } = await request.json()
+  const userQuestion = getLastUserMessage(messages)
+  const country = findRelevantCountry(userQuestion)
 
-  const countryData = loadCountryContext()
-  const systemInstruction =
-    `You are a world knowledge assistant. Answer questions strictly based on the country data provided below. ` +
-    `If the question is about a country not in the data, say so clearly. Be concise and friendly.\n\n` +
-    `Country Data:\n${countryData}`
+  const systemInstruction = country
+    ? `You are a world knowledge assistant. Answer questions using only the selected country record below. Be concise, helpful, and do not invent details.\n\nSelected Country:\n${serializeCountryContext(country)}`
+    : `You are a world knowledge assistant. The user asked a question about countries, but the system only has data for these countries: ${getCountryNameList()}. ` +
+      `If the requested country is not listed, respond that the information is not available. Be concise, helpful, and do not invent details.`
 
   const genAI = new GoogleGenerativeAI(apiKey)
   const model = genAI.getGenerativeModel({

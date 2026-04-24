@@ -2,11 +2,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, set up your OpenAI API key:
+First, set up your API key:
 
-1. Get an API key from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Create a `.env.local` file in the project root
-3. Add your API key: `OPENAI_API_KEY=your-api-key-here`
+**Google Gemini**
+1. Get an API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Add to `.env.local`: `GEMINI_API_KEY=your-api-key-here`
 
 Then, run the development server:
 
@@ -41,7 +41,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-**Important**: Add your `OPENAI_API_KEY` to your Vercel environment variables when deploying.
+**Important**: Add your API keys to Vercel environment variables:
+- `GEMINI_API_KEY` (required)
 ---
 
 ## Assignment 6 evaluation
@@ -50,7 +51,7 @@ This project was extended for Assignment 6 by adding a structured country datase
 
 * `data/gold/countries.json` now stores structured country metadata.
 * `lib/countries.ts` selects the relevant country for a user question.
-* `app/api/chat/route.ts` builds the model prompt from the selected country record using OpenAI GPT-4.
+* `app/api/chat/route.ts` builds the model prompt from the selected country record using Google Gemini.
 * `EVALUATION.md` documents representative cases, failure cases, and the lightweight baseline comparison.
 
 See `EVALUATION.md` for the full evaluation plan and improvement summary.

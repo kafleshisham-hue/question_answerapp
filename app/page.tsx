@@ -135,7 +135,7 @@ export default function Home() {
                         <div>
                           <h3 className="text-xl font-semibold text-slate-900">{country.name}</h3>
                           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
-                            {country.facts?.split('.')[0] || 'Country facts'}.
+                            {country.context?.split('.')[0] || 'Country facts'}.
                           </p>
                         </div>
                         <a
@@ -153,11 +153,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="mt-4 grid gap-2 rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">
-                        <div><span className="font-semibold text-slate-700">Capital:</span> {country.capital || 'Unknown'}</div>
-                        <div><span className="font-semibold text-slate-700">Population:</span> {country.population || 'Unknown'}</div>
-                        <div><span className="font-semibold text-slate-700">Region:</span> {country.region || 'Unknown'}</div>
-                        <div><span className="font-semibold text-slate-700">Languages:</span> {country.languages?.join(', ') || 'Unknown'}</div>
-                        <div><span className="font-semibold text-slate-700">Facts:</span> {country.facts || 'No facts available'}</div>
+                        <div><span className="font-semibold text-slate-700">Info:</span> {country.context}</div>
                       </div>
                       <div className="mt-5 flex gap-3">
                         <button
@@ -246,7 +242,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-3xl px-6 py-4 text-center text-xs text-slate-500">
-          <p>Powered by OpenAI GPT-4 • Built with Next.js</p>
+          <p>Powered by Google Gemini • Built with Next.js</p>
         </div>
       </footer>
 

@@ -89,5 +89,3 @@ npm start
 🇳🇵 Nepal • 🇨🇦 Canada • 🇯🇵 Japan • 🇧🇷 Brazil • 🇩🇪 Germany • 🇦🇺 Australia • 🇮🇳 India • 🇪🇬 Egypt • 🇲🇽 Mexico • 🇫🇷 France • 🇨🇳 China • 🇿🇦 South Africa
 
 ---
-
-*Built for Artificial Intelligence course - Semester 2, Assignment 6*

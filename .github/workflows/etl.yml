@@ -40,7 +40,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Sync gold dataset to S3
+      - name: Sync local data folder to S3
         run: |
-          aws s3 sync data/gold s3://question-answer-app123/gold --delete
+          aws s3 sync data s3://question-answer-app123/data --delete
 
